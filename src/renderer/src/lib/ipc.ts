@@ -19,8 +19,8 @@
  */
 
 import type { IpcServices } from '@shared/types/ipc'
-
 import { createIpcProxy } from 'electron-ipc-decorator/client'
+import { apiClient } from './web-api'
 
 const isElectron = window?.api
 
@@ -45,15 +45,11 @@ export const ipcServices = isElectron
         set: async () => {}
       },
       download: {
-        getVideoInfo: async () => {
-          console.warn('Download service not available in web mode')
-          throw new Error('Download service requires Electron or backend server')
-        },
-        getPlaylistInfo: async () => {
-          console.warn('Download service not available in web mode')
-          throw new Error('Download service requires Electron or backend server')
-        },
-        startDownload: async () => {
+        getVideoInfo: async (url: string) => apiClient.download.getVideoInfo(url),
+        getVideoInfoWithCommand: async (url: string) =>
+          apiClient.download.getVideoInfoWithCommand(url),
+        getPlaylistInfo: async (url: string) => apiClient.download.getPlaylistInfo(url),
+        startDownload: async (id: string, options: unknown) => {
           console.warn('Download service not available in web mode')
           throw new Error('Download service requires Electron or backend server')
         },

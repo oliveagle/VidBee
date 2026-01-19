@@ -241,6 +241,22 @@ const handleApiRequest = async (
       return
     }
 
+    if (pathname === '/api/download/video-info-with-command' && method === 'GET') {
+      const url = requestUrl.searchParams.get('url')
+      if (!url || !url.trim()) {
+        writeJson(res, 400, { error: 'Missing url' })
+        return
+      }
+      try {
+        const result = await downloadEngine.getVideoInfoWithCommand(url.trim())
+        writeJson(res, 200, result)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to fetch video info'
+        writeJson(res, 500, { error: message })
+      }
+      return
+    }
+
     if (pathname === '/api/download/playlist-info' && method === 'GET') {
       const url = requestUrl.searchParams.get('url')
       if (!url || !url.trim()) {

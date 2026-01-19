@@ -5,7 +5,13 @@
  * when running in web mode (without Electron).
  */
 
-import type { DownloadItem, DownloadOptions, PlaylistInfo, VideoInfo } from '@shared/types'
+import type {
+  DownloadItem,
+  DownloadOptions,
+  PlaylistInfo,
+  VideoInfo,
+  VideoInfoCommandResult
+} from '@shared/types'
 
 const API_BASE_URL = window.location.origin
 
@@ -46,6 +52,8 @@ const apiClient = {
   download: {
     getVideoInfo: (url: string): Promise<VideoInfo> =>
       request(`/api/download/video-info?url=${encodeURIComponent(url)}`),
+    getVideoInfoWithCommand: (url: string): Promise<VideoInfoCommandResult> =>
+      request(`/api/download/video-info-with-command?url=${encodeURIComponent(url)}`),
     getPlaylistInfo: (url: string): Promise<PlaylistInfo> =>
       request(`/api/download/playlist-info?url=${encodeURIComponent(url)}`),
     getQueue: (): Promise<{ active: DownloadItem[]; status: unknown }> =>
