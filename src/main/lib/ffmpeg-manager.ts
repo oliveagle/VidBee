@@ -31,13 +31,18 @@ class FfmpegManager {
     const ffmpegFileName = platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'
     const ffprobeFileName = platform === 'win32' ? 'ffprobe.exe' : 'ffprobe'
 
-    const resolveBundledFfmpeg = (dirPath: string, label: string): string | null => {
+    const resolveBundledFfmpeg = (
+      dirPath: string,
+      label: string,
+      isSystemDir = false
+    ): string | null => {
       const ffmpegPath = path.join(dirPath, ffmpegFileName)
       const ffprobePath = path.join(dirPath, ffprobeFileName)
       if (!fs.existsSync(ffmpegPath) || !fs.existsSync(ffprobePath)) {
         return null
       }
-      if (platform !== 'win32') {
+      // Skip chmod for system directories as they already have correct permissions
+      if (platform !== 'win32' && !isSystemDir) {
         try {
           fs.chmodSync(ffmpegPath, 0o755)
           fs.chmodSync(ffprobePath, 0o755)
@@ -77,7 +82,7 @@ class FfmpegManager {
     if (platform === 'darwin') {
       const commonDirs = ['/opt/homebrew/bin', '/usr/local/bin']
       for (const candidate of commonDirs) {
-        const resolved = resolveBundledFfmpeg(candidate, 'system ffmpeg')
+        const resolved = resolveBundledFfmpeg(candidate, 'system ffmpeg', true)
         if (resolved) {
           return resolved
         }
@@ -88,7 +93,7 @@ class FfmpegManager {
       try {
         const systemPath = execSync('which ffmpeg').toString().trim()
         if (systemPath && fs.existsSync(systemPath)) {
-          const resolved = resolveBundledFfmpeg(path.dirname(systemPath), 'system ffmpeg')
+          const resolved = resolveBundledFfmpeg(path.dirname(systemPath), 'system ffmpeg', true)
           if (resolved) {
             return resolved
           }
@@ -102,7 +107,7 @@ class FfmpegManager {
       try {
         const output = execSync('where ffmpeg').toString().split(/\r?\n/)[0]
         if (output && fs.existsSync(output)) {
-          const resolved = resolveBundledFfmpeg(path.dirname(output), 'system ffmpeg')
+          const resolved = resolveBundledFfmpeg(path.dirname(output), 'system ffmpeg', true)
           if (resolved) {
             return resolved
           }

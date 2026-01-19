@@ -193,6 +193,13 @@ const handleApiRequest = async (
 
     log.info(`API Request: ${method} ${pathname}`)
 
+    // Debug: check if pathname matches expected
+    if (pathname.includes('video-info')) {
+      log.info(
+        `[DEBUG] pathname="${pathname}" === "/api/download/video-info-with-command"? ${pathname === '/api/download/video-info-with-command'}`
+      )
+    }
+
     // App Service
     if (pathname === '/api/app/version' && method === 'GET') {
       writeJson(res, 200, { version: process.env.npm_package_version || '1.2.0' })
