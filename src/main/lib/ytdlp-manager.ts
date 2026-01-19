@@ -106,6 +106,18 @@ class YtDlpManager {
       } catch (_error) {
         // yt-dlp not in PATH, continue
       }
+
+      // Also check common user-installed locations
+      const userPaths = [
+        path.join(os.homedir(), '.local', 'bin', 'yt-dlp'),
+        path.join(os.homedir(), 'bin', 'yt-dlp')
+      ]
+      for (const p of userPaths) {
+        if (fs.existsSync(p)) {
+          scopedLoggers.engine.info('Using user-installed yt-dlp:', p)
+          return p
+        }
+      }
     }
 
     // At this point, no bundled/system binary found.
