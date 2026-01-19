@@ -29,6 +29,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { ipcServices } from '../lib/ipc'
 import { logger } from '../lib/logger'
+import { isWebMode, openExternalLink } from '../lib/web-utils'
 import { loadSettingsAtom, saveSettingAtom, settingsAtom } from '../store/settings'
 
 const normalizeProfileInput = (value: string) => value.trim().replace(/^['"]|['"]$/g, '')
@@ -93,7 +94,7 @@ export function Settings() {
     fetchPlatform()
   }, [])
 
-  const autoLaunchSupported = platform === 'darwin' || platform === 'win32'
+  const autoLaunchSupported = !isWebMode && (platform === 'darwin' || platform === 'win32')
 
   const handleSettingChange = useCallback(
     async (key: keyof typeof settings, value: (typeof settings)[keyof typeof settings]) => {
@@ -108,6 +109,11 @@ export function Settings() {
   )
 
   const handleSelectPath = async () => {
+    if (isWebMode) {
+      toast.info('File selection not available in web mode')
+      return
+    }
+
     try {
       const path = await ipcServices.fs.selectDirectory()
       if (path) {
@@ -120,6 +126,11 @@ export function Settings() {
   }
 
   const handleSelectConfigFile = async () => {
+    if (isWebMode) {
+      toast.info('File selection not available in web mode')
+      return
+    }
+
     try {
       const path = await ipcServices.fs.selectFile()
       if (path) {
@@ -132,6 +143,11 @@ export function Settings() {
   }
 
   const handleSelectCookiesFile = async () => {
+    if (isWebMode) {
+      toast.info('File selection not available in web mode')
+      return
+    }
+
     try {
       const path = await ipcServices.fs.selectFile()
       if (path) {
@@ -145,9 +161,15 @@ export function Settings() {
 
   const handleOpenCookiesFaq = async () => {
     try {
-      await ipcServices.fs.openExternal(
-        'https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp'
-      )
+      if (isWebMode) {
+        openExternalLink(
+          'https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp'
+        )
+      } else {
+        await ipcServices.fs.openExternal(
+          'https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp'
+        )
+      }
     } catch (error) {
       logger.error('Failed to open cookies FAQ:', error)
       toast.error(t('settings.openLinkError'))

@@ -28,6 +28,10 @@ export default defineConfig({
         '@shared': resolve('src/shared')
       }
     },
+    server: {
+      host: '0.0.0.0',
+      port: 5173
+    },
     plugins: [
       react(),
       Icons({

@@ -123,6 +123,8 @@
     "autoFolderHint": "자동 폴더는 메타데이터에서 생성됩니다.",
     "useAutoFolder": "자동 폴더 사용",
     "downloadVideo": "비디오 다운로드",
+    "dialogTitle": "비디오 또는 재생목록 다운로드",
+    "dialogDescription": "비디오 URL을 붙여넣어 직접 다운로드하거나 고급 다운로드 옵션을 구성하세요.",
     "downloading": "다운로드 중...",
     "enterUrl": "비디오 URL 입력",
     "enterUrlDescription": "비디오 URL을 붙여넣거나 입력하세요. ",

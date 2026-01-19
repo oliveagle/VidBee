@@ -19,6 +19,8 @@ import { loadSettingsAtom, settingsAtom } from './store/settings'
 import { loadSubscriptionsAtom, setSubscriptionsAtom } from './store/subscriptions'
 import { updateAvailableAtom, updateReadyAtom } from './store/update'
 
+const isWebMode = !window.api
+
 type Page = 'home' | 'subscriptions' | 'settings' | 'about'
 
 const pageToPath: Record<Page, string> = {
@@ -155,15 +157,13 @@ function AppContent() {
   }, [settings.enableAnalytics])
 
   useEffect(() => {
-    // Get platform info to determine if we should show title bar
     const getPlatform = async () => {
       try {
         const platformInfo = await ipcServices.app.getPlatform()
         setPlatform(platformInfo)
       } catch (error) {
-        console.error('Failed to get platform info:', error)
-        // Default to showing title bar if platform detection fails
-        setPlatform('unknown')
+        console.warn('Failed to get platform info:', error)
+        setPlatform('web')
       }
     }
     getPlatform()
@@ -255,8 +255,7 @@ function AppContent() {
 
       {/* Main Content */}
       <main className="flex flex-col flex-1 min-h-0 overflow-hidden bg-background">
-        {/* Custom Title Bar */}
-        <TitleBar platform={platform} />
+        {!isWebMode && <TitleBar platform={platform} />}
 
         <div className="flex-1 h-full overflow-y-auto overflow-x-hidden">
           <Routes>

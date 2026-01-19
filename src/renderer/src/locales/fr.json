@@ -123,6 +123,8 @@
     "autoFolderHint": "Les dossiers automatiques sont créés à partir des métadonnées.",
     "useAutoFolder": "Utiliser le dossier automatique",
     "downloadVideo": "Télécharger la Vidéo",
+    "dialogTitle": "Télécharger une Vidéo ou une Playlist",
+    "dialogDescription": "Collez une URL vidéo pour la télécharger directement ou configurez les options de téléchargement avancées.",
     "downloading": "Téléchargement en cours...",
     "enterUrl": "Entrer l'URL de la Vidéo",
     "enterUrlDescription": "Collez ou tapez une URL de vidéo. ",

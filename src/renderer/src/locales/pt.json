@@ -123,6 +123,8 @@
     "autoFolderHint": "Pastas automáticas são criadas a partir de metadados.",
     "useAutoFolder": "Usar pasta automática",
     "downloadVideo": "Baixar Vídeo",
+    "dialogTitle": "Baixar Vídeo ou Lista de Reprodução",
+    "dialogDescription": "Cole uma URL de vídeo para baixá-la diretamente ou configure opções avançadas de download.",
     "downloading": "Baixando...",
     "enterUrl": "Inserir URL do Vídeo",
     "enterUrlDescription": "Cole ou digite uma URL de vídeo. ",

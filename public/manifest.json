@@ -1,0 +1,22 @@
+{
+  "name": "VidBee",
+  "short_name": "VidBee",
+  "description": "A modern video downloader for downloading videos and audios from 1000+ websites worldwide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f59e0b",
+  "orientation": "any",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "id": "vidbee-web",
+  "lang": "en"
+}

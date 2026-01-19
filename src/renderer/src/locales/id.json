@@ -123,6 +123,8 @@
     "autoFolderHint": "Folder otomatis dibuat dari metadata.",
     "useAutoFolder": "Gunakan folder otomatis",
     "downloadVideo": "Unduh Video",
+    "dialogTitle": "Unduh Video atau Playlist",
+    "dialogDescription": "Tempel URL video untuk mengunduhnya langsung atau konfigurasi opsi unduh lanjutan.",
     "downloading": "Mengunduh...",
     "enterUrl": "Masukkan URL Video",
     "enterUrlDescription": "Tempel atau ketik URL video. ",

@@ -123,6 +123,8 @@
     "autoFolderHint": "自动文件夹由元数据创建。",
     "useAutoFolder": "使用自动文件夹",
     "downloadVideo": "下载视频",
+    "dialogTitle": "下载视频或播放列表",
+    "dialogDescription": "粘贴视频链接直接下载或配置高级下载选项。",
     "downloading": "正在下载...",
     "enterUrl": "输入视频链接",
     "enterUrlDescription": "粘贴或输入一个视频链接。",

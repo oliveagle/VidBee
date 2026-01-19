@@ -123,6 +123,8 @@
     "autoFolderHint": "Las carpetas automáticas se crean a partir de metadatos.",
     "useAutoFolder": "Usar carpeta automática",
     "downloadVideo": "Descargar Video",
+    "dialogTitle": "Descargar Video o Lista de Reproducción",
+    "dialogDescription": "Pega una URL de video para descargarla directamente o configura opciones avanzadas de descarga.",
     "downloading": "Descargando...",
     "enterUrl": "Ingresar URL del Video",
     "enterUrlDescription": "Pega o escribe una URL de video. ",

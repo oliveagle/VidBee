@@ -123,6 +123,8 @@
     "autoFolderHint": "Automatic folders are created from metadata.",
     "useAutoFolder": "Use automatic folder",
     "downloadVideo": "Download Video",
+    "dialogTitle": "Download Video or Playlist",
+    "dialogDescription": "Paste a video URL to download it directly or configure advanced download options.",
     "downloading": "Downloading...",
     "enterUrl": "Enter Video URL",
     "enterUrlDescription": "Paste or type a video URL. ",

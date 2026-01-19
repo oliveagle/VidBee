@@ -1,5 +1,6 @@
 import { Button } from '@renderer/components/ui/button'
 import { ImageWithPlaceholder } from '@renderer/components/ui/image-with-placeholder'
+import { Input } from '@renderer/components/ui/input'
 import { Label } from '@renderer/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@renderer/components/ui/radio-group'
 import { ScrollArea } from '@renderer/components/ui/scroll-area'

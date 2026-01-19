@@ -123,6 +123,8 @@
     "autoFolderHint": "Le cartelle automatiche vengono create dai metadati.",
     "useAutoFolder": "Usa cartella automatica",
     "downloadVideo": "Scarica Video",
+    "dialogTitle": "Scarica Video o Playlist",
+    "dialogDescription": "Incolla un URL video per scaricarlo direttamente o configura opzioni di download avanzate.",
     "downloading": "Scaricando...",
     "enterUrl": "Inserisci URL Video",
     "enterUrlDescription": "Incolla o digita un URL video. ",

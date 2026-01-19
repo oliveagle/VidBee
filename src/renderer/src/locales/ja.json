@@ -123,6 +123,8 @@
     "autoFolderHint": "自動フォルダーはメタデータから作成されます。",
     "useAutoFolder": "自動フォルダーを使用",
     "downloadVideo": "ビデオをダウンロード",
+    "dialogTitle": "ビデオまたはプレイリストをダウンロード",
+    "dialogDescription": "ビデオURLを貼り付けて直接ダウンロードするか、高度なダウンロードオプションを設定します。",
     "downloading": "ダウンロード中...",
     "enterUrl": "ビデオURLを入力",
     "enterUrlDescription": "ビデオURLを貼り付けまたは入力してください。 ",

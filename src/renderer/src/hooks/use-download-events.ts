@@ -32,7 +32,7 @@ export function useDownloadEvents() {
           removeDownload(id)
         }
       } catch (error) {
-        console.error('Failed to sync history item:', error)
+        console.warn('Failed to sync history item:', error)
       }
     },
     [addHistoryRecord, removeDownload]
@@ -46,7 +46,7 @@ export function useDownloadEvents() {
           addDownload(item)
         })
       } catch (error) {
-        console.error('Failed to load active downloads:', error)
+        console.warn('Failed to load active downloads:', error)
       }
     }
 

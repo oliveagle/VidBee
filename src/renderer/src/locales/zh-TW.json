@@ -123,6 +123,8 @@
     "autoFolderHint": "自動資料夾會由中繼資料建立。",
     "useAutoFolder": "使用自動資料夾",
     "downloadVideo": "下載影片",
+    "dialogTitle": "下載影片或播放列表",
+    "dialogDescription": "貼上影片網址直接下載或設定進階下載選項。",
     "downloading": "正在下載...",
     "enterUrl": "輸入影片連結",
     "enterUrlDescription": "貼上或輸入一個影片連結。",

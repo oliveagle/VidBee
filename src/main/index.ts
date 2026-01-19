@@ -20,7 +20,12 @@ import { ffmpegManager } from './lib/ffmpeg-manager'
 import { subscriptionManager } from './lib/subscription-manager'
 import { subscriptionScheduler } from './lib/subscription-scheduler'
 import { ytdlpManager } from './lib/ytdlp-manager'
-import { startExtensionApiServer, stopExtensionApiServer } from './local-api'
+import {
+  startExtensionApiServer,
+  startWebServer,
+  stopExtensionApiServer,
+  stopWebServer
+} from './local-api'
 import { settingsManager } from './settings'
 import { createTray, destroyTray } from './tray'
 import { applyAutoLaunchSetting } from './utils/auto-launch'
@@ -33,6 +38,8 @@ log.initialize()
 configureLogger()
 
 const RENDERER_DIST_PATH = join(__dirname, '../renderer')
+const IS_WEB_MODE = process.env.VIDBEE_MODE === 'web-only'
+const IS_BOTH_MODE = process.env.VIDBEE_MODE === 'both' || !process.env.VIDBEE_MODE
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -465,15 +472,26 @@ app.whenReady().then(async () => {
 
   await startExtensionApiServer()
 
+  if (IS_WEB_MODE || IS_BOTH_MODE) {
+    const webPort = await startWebServer(RENDERER_DIST_PATH)
+    if (webPort) {
+      log.info(`VidBee Web interface available at http://0.0.0.0:${webPort}`)
+    }
+  }
+
   applyDockVisibility(settingsManager.get('hideDockIcon'))
   applyAutoLaunchSetting(settingsManager.get('launchAtLogin'))
 
-  createWindow()
+  if (!IS_WEB_MODE) {
+    createWindow()
+  }
 
   initAutoUpdater()
 
   // Create system tray
-  createTray()
+  if (!IS_WEB_MODE) {
+    createTray()
+  }
 
   subscriptionScheduler.start()
 
@@ -524,8 +542,11 @@ app.on('window-all-closed', () => {
 
 // Cleanup tray on quit
 app.on('will-quit', () => {
-  destroyTray()
+  if (!IS_WEB_MODE) {
+    destroyTray()
+  }
   void stopExtensionApiServer()
+  void stopWebServer()
 })
 
 // In this file you can include the rest of your app's specific main process

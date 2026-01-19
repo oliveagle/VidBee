@@ -1,6 +1,13 @@
 import { Button } from '@renderer/components/ui/button'
 import { Checkbox } from '@renderer/components/ui/checkbox'
-import { Dialog, DialogContent, DialogFooter, DialogHeader } from '@renderer/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@renderer/components/ui/dialog'
 import { Input } from '@renderer/components/ui/input'
 import { Label } from '@renderer/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/components/ui/tabs'
@@ -130,6 +137,7 @@ export function DownloadDialog({
   // Playlist states
   const downloadTypeId = useId()
   const advancedOptionsId = useId()
+  const videoUrlInputId = useId()
   const [playlistUrl, setPlaylistUrl] = useState('')
   const [downloadType, setDownloadType] = useState<'video' | 'audio'>('video')
   const [startIndex, setStartIndex] = useState('1')
@@ -809,6 +817,10 @@ export function DownloadDialog({
           className="w-full flex flex-col flex-1 min-h-0 gap-0"
         >
           <DialogHeader>
+            <DialogTitle className="sr-only">{t('download.dialogTitle')}</DialogTitle>
+            <DialogDescription className="sr-only">
+              {t('download.dialogDescription')}
+            </DialogDescription>
             <TabsList>
               <TabsTrigger value="single" onClick={() => setActiveTab('single')}>
                 <Video className="h-3.5 w-3.5" />
@@ -822,6 +834,30 @@ export function DownloadDialog({
           </DialogHeader>
           {/* Single Video Download Tab */}
           <TabsContent value="single" className="flex flex-col flex-1 min-h-0 mt-0">
+            {!videoInfo && !loading && (
+              <div className="flex-1 flex flex-col gap-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor={videoUrlInputId} className="text-sm font-medium">
+                    {t('download.enterUrl')}
+                  </Label>
+                  <Input
+                    id={videoUrlInputId}
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder={t('download.urlPlaceholder')}
+                    className="w-full"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        void handleFetchVideo()
+                      }
+                    }}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    {t('download.enterUrlDescription')}
+                  </p>
+                </div>
+              </div>
+            )}
             <SingleVideoDownload
               loading={loading}
               error={error}

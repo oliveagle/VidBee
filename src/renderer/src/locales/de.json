@@ -123,6 +123,8 @@
     "autoFolderHint": "Automatische Ordner werden aus Metadaten erstellt.",
     "useAutoFolder": "Automatischen Ordner verwenden",
     "downloadVideo": "Video herunterladen",
+    "dialogTitle": "Video oder Playlist herunterladen",
+    "dialogDescription": "Fügen Sie eine Video-URL ein, um sie direkt herunterzuladen, oder konfigurieren Sie erweiterte Download-Optionen.",
     "downloading": "Wird heruntergeladen...",
     "enterUrl": "Video-URL eingeben",
     "enterUrlDescription": "Fügen Sie eine Video-URL ein oder geben Sie sie ein. ",
