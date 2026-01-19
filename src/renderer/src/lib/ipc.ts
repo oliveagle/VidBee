@@ -49,13 +49,14 @@ export const ipcServices = isElectron
         getVideoInfoWithCommand: async (url: string) =>
           apiClient.download.getVideoInfoWithCommand(url),
         getPlaylistInfo: async (url: string) => apiClient.download.getPlaylistInfo(url),
-        startDownload: async (id: string, options: unknown) => {
-          console.warn('Download service not available in web mode')
-          throw new Error('Download service requires Electron or backend server')
-        },
-        cancelDownload: async () => {},
-        getQueue: async () => ({ active: [], status: {} }),
-        getActiveDownloads: async () => []
+        startDownload: async (id: string, options: unknown) =>
+          apiClient.download.startDownload(id, options as never),
+        cancelDownload: async (id: string) => apiClient.download.cancelDownload(id),
+        getQueue: async () => apiClient.download.getQueue(),
+        getActiveDownloads: async () => {
+          const queue = await apiClient.download.getQueue()
+          return queue.active.map((item) => item.id)
+        }
       },
       history: {
         getHistory: async () => [],
@@ -102,7 +103,8 @@ export const ipcServices = isElectron
         quitAndInstall: async () => {}
       },
       thumbnail: {
-        getThumbnail: async (url: string) => url
+        getThumbnail: async (url: string) => url,
+        getThumbnailPath: async (url: string) => url
       }
     } as unknown as IpcServices)
 
