@@ -26,8 +26,15 @@ const request = async <T>(path: string, options: RequestInit = {}): Promise<T> =
   })
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Request failed' }))
-    throw new Error(error.error || `HTTP ${response.status}`)
+    // Try to parse as JSON error response
+    const contentType = response.headers.get('content-type')
+    if (contentType?.includes('application/json')) {
+      const error = await response.json().catch(() => ({ error: 'Request failed' }))
+      throw new Error(error.error || `HTTP ${response.status}`)
+    }
+    // For non-JSON responses (like HTML error pages), extract a simple message
+    const text = await response.text().catch(() => 'Request failed')
+    throw new Error(text.slice(0, 200) || `HTTP ${response.status}`)
   }
 
   return response.json()
