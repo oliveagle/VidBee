@@ -36,7 +36,8 @@ export const ipcServices = isElectron
   : ({
       app: {
         getPlatform: async () => 'web',
-        getVersion: async () => '1.0.0-web'
+        getVersion: async () => '1.0.0-web',
+        getOsVersion: async () => 'Unknown'
       },
       settings: {
         getAll: async () => ({}),
