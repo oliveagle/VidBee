@@ -2,7 +2,7 @@ import { useSetAtom } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { ipcEvents, ipcServices } from '../lib/ipc'
+import { ipcEvents, ipcServices, isWebMode } from '../lib/ipc'
 import {
   addDownloadAtom,
   addHistoryRecordAtom,
@@ -52,6 +52,46 @@ export function useDownloadEvents() {
 
     void syncActiveDownloads()
   }, [addDownload])
+
+  // Web mode polling for download progress
+  useEffect(() => {
+    if (!isWebMode) {
+      return // Use IPC events in Electron mode
+    }
+
+    const pollInterval = 3000
+    const pollTimer = setInterval(async () => {
+      try {
+        const activeItems = await ipcServices.download.getActiveDownloads()
+        const queueStatus = await ipcServices.download.getQueueStatus()
+
+        activeItems.forEach((item) => {
+          const isStillActive = queueStatus.activeIds.includes(item.id)
+          const status = isStillActive ? 'downloading' : 'completed'
+          updateDownload({
+            id: item.id,
+            changes: {
+              status,
+              progress: item.progress || {
+                percent: 0,
+                currentSpeed: '',
+                eta: '',
+                downloaded: '',
+                total: ''
+              },
+              speed: item.speed || ''
+            }
+          })
+        })
+      } catch {
+        // Silently ignore polling errors
+      }
+    }, pollInterval)
+
+    return () => {
+      clearInterval(pollTimer)
+    }
+  }, [updateDownload])
 
   useEffect(() => {
     const handleStarted = (rawId: unknown) => {
