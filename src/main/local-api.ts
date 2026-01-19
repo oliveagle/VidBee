@@ -303,6 +303,17 @@ const handleApiRequest = async (
       return
     }
 
+    if (pathname.match(/^\/api\/download\/[^/]+\/info$/) && method === 'PUT') {
+      const match = pathname.match(/^\/api\/download\/([^/]+)\/info$/)
+      if (match) {
+        const id = match[1]
+        const updates = (await getRequestBody(req)) as unknown
+        downloadEngine.updateDownloadInfo(id, updates as never)
+        writeJson(res, 200, { success: true })
+        return
+      }
+    }
+
     // History Service
     if (pathname === '/api/history' && method === 'GET') {
       writeJson(res, 200, historyManager.getHistory())

@@ -52,6 +52,8 @@ export const ipcServices = isElectron
         startDownload: async (id: string, options: unknown) =>
           apiClient.download.startDownload(id, options as never),
         cancelDownload: async (id: string) => apiClient.download.cancelDownload(id),
+        updateDownloadInfo: async (id: string, updates: unknown) =>
+          apiClient.download.updateDownloadInfo(id, updates as never),
         getQueue: async () => apiClient.download.getQueue(),
         getActiveDownloads: async () => {
           const queue = await apiClient.download.getQueue()

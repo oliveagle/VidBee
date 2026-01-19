@@ -95,6 +95,11 @@ const apiClient = {
     cancelDownload: (id: string): Promise<{ success: boolean }> =>
       request(`/api/download/${id}`, {
         method: 'DELETE'
+      }),
+    updateDownloadInfo: (id: string, updates: unknown): Promise<{ success: boolean }> =>
+      request(`/api/download/${id}/info`, {
+        method: 'PUT',
+        body: JSON.stringify(updates)
       })
   },
 
