@@ -40,9 +40,9 @@ export const ipcServices = isElectron
         getOsVersion: async () => 'Unknown'
       },
       settings: {
-        getAll: async () => ({}),
-        get: async () => undefined,
-        set: async () => {}
+        getAll: async () => apiClient.settings.getAll(),
+        get: async (key: string) => apiClient.settings.get(key),
+        set: async (key: string, value: unknown) => apiClient.settings.set(key, value)
       },
       download: {
         getVideoInfo: async (url: string) => apiClient.download.getVideoInfo(url),

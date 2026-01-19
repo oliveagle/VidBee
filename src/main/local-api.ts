@@ -320,6 +320,12 @@ const handleApiRequest = async (
       return
     }
 
+    if (pathname === '/api/history/cleanup' && method === 'POST') {
+      const removed = historyManager.removeInvalidRecords()
+      writeJson(res, 200, { success: true, removed })
+      return
+    }
+
     if (pathname === '/api/history/count' && method === 'GET') {
       writeJson(res, 200, historyManager.getHistoryCount())
       return
