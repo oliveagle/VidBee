@@ -17,6 +17,8 @@ const API_BASE_URL = window.location.origin
 
 const request = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
   const url = `${API_BASE_URL}${path}`
+  console.log(`Web API Request: ${options.method || 'GET'} ${url}`)
+
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -25,23 +27,36 @@ const request = async <T>(path: string, options: RequestInit = {}): Promise<T> =
     }
   })
 
+  console.log(
+    `Web API Response: ${url} - status: ${response.status}, content-type: ${response.headers.get('content-type')}`
+  )
+
   if (!response.ok) {
     // Try to parse as JSON error response
     const contentType = response.headers.get('content-type')
+    const text = await response.text().catch(() => 'Failed to read response body')
+    console.error(`Web API Error Response:`, {
+      url,
+      status: response.status,
+      contentType,
+      body: text.slice(0, 500)
+    })
+
     if (contentType?.includes('application/json')) {
-      const error = await response.json().catch(() => ({ error: 'Request failed' }))
-      const message = error.error || `HTTP ${response.status}`
-      console.error(`Web API Error: ${message}`, { url, status: response.status })
-      throw new Error(message)
+      try {
+        const error = JSON.parse(text)
+        throw new Error(error.error || `HTTP ${response.status}`)
+      } catch {
+        throw new Error(text.slice(0, 200) || `HTTP ${response.status}`)
+      }
     }
     // For non-JSON responses (like HTML error pages), extract a simple message
-    const text = await response.text().catch(() => 'Request failed')
-    const message = text.slice(0, 200) || `HTTP ${response.status}`
-    console.error(`Web API Error: ${message}`, { url, status: response.status })
-    throw new Error(message)
+    throw new Error(`Server error (${response.status}): ${text.slice(0, 100)}`)
   }
 
-  return response.json()
+  const json = await response.json()
+  console.log(`Web API Success: ${url}`)
+  return json
 }
 
 const apiClient = {
