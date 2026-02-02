@@ -18,8 +18,10 @@ export const loadDownloadSession = (): DownloadSessionItem[] => {
   try {
     const db = historyManager.getDatabase()
     if (!db) {
+      console.warn('[Session] Database not available')
       return []
     }
+    console.log('[Session] Loading active downloads from database...')
 
     const rows = db
       .select({
@@ -54,6 +56,11 @@ export const loadDownloadSession = (): DownloadSessionItem[] => {
       .from(downloadHistoryTable)
       .where(inArray(downloadHistoryTable.status, [...ACTIVE_STATUSES]))
       .all()
+
+    console.log(`[Session] Found ${rows.length} active downloads in database`)
+    rows.forEach((row) => {
+      console.log(`[Session] - ${row.id}: ${row.status} (${row.title})`)
+    })
 
     return rows
       .map((row) => {

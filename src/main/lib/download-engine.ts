@@ -1221,6 +1221,7 @@ class DownloadEngine extends EventEmitter {
   }
 
   getActiveDownloads(): DownloadItem[] {
+    console.log('[Engine] getActiveDownloads called')
     this.restoreActiveDownloads()
     const items = new Map<string, DownloadItem>()
     for (const item of this.queue.getActiveItems()) {
@@ -1229,25 +1230,34 @@ class DownloadEngine extends EventEmitter {
     for (const item of this.queue.getQueuedItems()) {
       items.set(item.id, item)
     }
-    return Array.from(items.values()).sort((a, b) => b.createdAt - a.createdAt)
+    const result = Array.from(items.values()).sort((a, b) => b.createdAt - a.createdAt)
+    console.log(`[Engine] Returning ${result.length} active downloads`)
+    return result
   }
 
   restoreActiveDownloads(): void {
+    console.log('[Engine] Restoring active downloads...')
     const sessionItems = loadDownloadSession()
+    console.log(`[Engine] Loaded ${sessionItems.length} session items`)
     if (sessionItems.length === 0) {
+      console.log('[Engine] No session items to restore')
       return
     }
 
     for (const entry of sessionItems) {
+      console.log(`[Engine] Processing entry: ${entry.id}`)
       if (!entry?.id || !entry.options?.url || !entry.options.type) {
+        console.log(`[Engine] Skipping entry: invalid data`)
         continue
       }
       if (this.queue.getItemDetails(entry.id)) {
+        console.log(`[Engine] Skipping entry: already in queue`)
         continue
       }
 
       const historyItem = historyManager.getHistoryById(entry.id)
       if (historyItem && ['completed', 'error', 'cancelled'].includes(historyItem.status)) {
+        console.log(`[Engine] Skipping entry: status is ${historyItem.status}`)
         continue
       }
 
@@ -1262,6 +1272,7 @@ class DownloadEngine extends EventEmitter {
         completedAt: undefined
       }
 
+      console.log(`[Engine] Restoring task to queue: ${entry.id}`)
       this.queue.add(entry.id, entry.options, restoredItem)
 
       this.upsertHistoryEntry(entry.id, entry.options, {
