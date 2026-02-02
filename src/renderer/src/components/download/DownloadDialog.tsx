@@ -26,6 +26,7 @@ import { ipcEvents, ipcServices } from '../../lib/ipc'
 import { addDownloadAtom, updateDownloadAtom } from '../../store/downloads'
 import { loadSettingsAtom, settingsAtom } from '../../store/settings'
 import {
+  cancelVideoInfoAtom,
   currentVideoInfoAtom,
   fetchVideoInfoAtom,
   videoInfoCommandAtom,
@@ -115,6 +116,7 @@ export function DownloadDialog({
   const [error] = useAtom(videoInfoErrorAtom)
   const [settings] = useAtom(settingsAtom)
   const fetchVideoInfo = useSetAtom(fetchVideoInfoAtom)
+  const cancelVideoInfo = useSetAtom(cancelVideoInfoAtom)
   const loadSettings = useSetAtom(loadSettingsAtom)
   const updateDownload = useSetAtom(updateDownloadAtom)
   const addDownload = useSetAtom(addDownloadAtom)
@@ -866,6 +868,7 @@ export function DownloadDialog({
               feedbackSourceUrl={url}
               ytDlpCommand={videoInfoCommand ?? undefined}
               onStateChange={handleSingleVideoStateChange}
+              onCancel={cancelVideoInfo}
             />
           </TabsContent>
 

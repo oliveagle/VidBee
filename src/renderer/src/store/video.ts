@@ -43,3 +43,8 @@ export const clearVideoInfoAtom = atom(null, (_get, set) => {
   set(videoInfoErrorAtom, null)
   set(videoInfoCommandAtom, null)
 })
+
+export const cancelVideoInfoAtom = atom(null, (_get, set) => {
+  set(videoInfoLoadingAtom, false)
+  set(videoInfoErrorAtom, 'Cancelled by user')
+})

@@ -40,6 +40,7 @@ interface SingleVideoDownloadProps {
   feedbackSourceUrl?: string | null
   ytDlpCommand?: string
   onStateChange: (state: Partial<SingleVideoState>) => void
+  onCancel?: () => void
 }
 
 const qualityPresetToVideoHeight: Record<OneClickQualityPreset, number | null> = {
@@ -390,7 +391,8 @@ export function SingleVideoDownload({
   state,
   feedbackSourceUrl,
   ytDlpCommand,
-  onStateChange
+  onStateChange,
+  onCancel
 }: SingleVideoDownloadProps) {
   const { t } = useTranslation()
   const cachedThumbnail = useCachedThumbnail(videoInfo?.thumbnail)
@@ -526,6 +528,11 @@ export function SingleVideoDownload({
         <div className="flex-1 flex flex-col items-center justify-center gap-3 min-h-[200px]">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <p className="text-sm text-muted-foreground">{t('download.fetchingVideoInfo')}</p>
+          {onCancel && (
+            <Button variant="outline" size="sm" onClick={onCancel}>
+              {t('common.cancel')}
+            </Button>
+          )}
         </div>
       )}
 
