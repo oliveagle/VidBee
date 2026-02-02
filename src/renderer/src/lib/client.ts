@@ -109,9 +109,9 @@ export const client = {
       return ipcServices?.history.getHistory() || []
     },
 
-    getCount: async () => {
+    getHistoryCount: async () => {
       if (isWebMode) {
-        return apiClient.history.getCount()
+        return apiClient.history.getHistoryCount()
       }
       return ipcServices?.history.getHistoryCount()
     },

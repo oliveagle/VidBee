@@ -144,9 +144,24 @@ export function UnifiedDownloadHistory({
   const [confirmAction, setConfirmAction] = useState<ConfirmAction | null>(null)
   const [confirmBusy, setConfirmBusy] = useState(false)
   const [alsoDeleteFiles, setAlsoDeleteFiles] = useState(false)
+  const [dbRecordCount, setDbRecordCount] = useState<number>(0)
   const alsoDeleteFilesId = useId()
 
   useHistorySync()
+
+  useEffect(() => {
+    const fetchDbCount = async () => {
+      try {
+        const count = await ipcServices.history.getHistoryCount()
+        setDbRecordCount(count.total)
+      } catch {
+        setDbRecordCount(0)
+      }
+    }
+    void fetchDbCount()
+    const interval = setInterval(fetchDbCount, 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   const historyRecords = useMemo(
     () => allRecords.filter((record) => record.entryType === 'history'),
@@ -506,6 +521,7 @@ export function UnifiedDownloadHistory({
                 </Button>
               )
             })}
+            <span className="text-xs text-muted-foreground ml-2">DB: {dbRecordCount}</span>
           </div>
           <div className="flex items-center gap-2">
             <Button

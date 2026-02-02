@@ -105,7 +105,7 @@ const apiClient = {
 
   history: {
     getHistory: (): Promise<unknown[]> => request('/api/history'),
-    getCount: (): Promise<unknown> => request('/api/history/count'),
+    getHistoryCount: (): Promise<unknown> => request('/api/history/count'),
     removeItem: (id: string): Promise<{ success: boolean }> =>
       request(`/api/history/${id}`, {
         method: 'DELETE'

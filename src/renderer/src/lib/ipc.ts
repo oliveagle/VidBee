@@ -61,13 +61,21 @@ export const ipcServices = isElectron
         }
       },
       history: {
-        getHistory: async () => [],
-        getCount: async () => ({ active: 0, completed: 0, error: 0, cancelled: 0, total: 0 }),
-        getHistoryById: async () => undefined,
+        getHistory: async () => apiClient.history.getHistory(),
+        getHistoryCount: async () => apiClient.history.getHistoryCount(),
+        getHistoryById: async (id: string) => {
+          const history = await apiClient.history.getHistory()
+          return history.find((item: unknown) => (item as { id: string }).id === id)
+        },
         addHistoryItem: async () => {},
-        removeHistoryItems: async () => 0,
+        removeHistoryItems: async (ids: string[]) => {
+          for (const id of ids) {
+            await apiClient.history.removeItem(id)
+          }
+          return ids.length
+        },
         removeHistoryByPlaylistId: async () => 0,
-        clearHistory: async () => {}
+        clearHistory: async () => apiClient.history.clear()
       },
       subscriptions: {
         list: async () => [],
