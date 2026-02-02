@@ -649,6 +649,35 @@ export function DownloadItem({ download, isSelected = false, onToggleSelect }: D
     })
   }
 
+  metadataDetails.push({
+    label: 'Debug: Status',
+    value: download.status
+  })
+  metadataDetails.push({
+    label: 'Debug: ID',
+    value: download.id
+  })
+  metadataDetails.push({
+    label: 'Debug: Progress',
+    value: JSON.stringify(download.progress)
+  })
+  metadataDetails.push({
+    label: 'Debug: Created At',
+    value: new Date(download.createdAt).toLocaleString()
+  })
+  if (download.completedAt) {
+    metadataDetails.push({
+      label: 'Debug: Completed At',
+      value: new Date(download.completedAt).toLocaleString()
+    })
+  }
+  if (download.error) {
+    metadataDetails.push({
+      label: 'Debug: Error',
+      value: download.error
+    })
+  }
+
   const hasMetadataDetails = metadataDetails.length > 0
 
   const isSelectedHistory = selectionEnabled && isSelected
