@@ -268,7 +268,6 @@ class DownloadEngine extends EventEmitter {
   private activeDownloads: Map<string, DownloadProcess> = new Map()
   private queue: DownloadQueue
   private sessionPersistTimer: NodeJS.Timeout | null = null
-  private sessionRestored = false
 
   constructor() {
     super()
@@ -749,6 +748,10 @@ class DownloadEngine extends EventEmitter {
   }
 
   private async executeDownload(id: string, options: DownloadOptions): Promise<void> {
+    if (this.activeDownloads.has(id)) {
+      scopedLoggers.download.warn(`Download ${id} is already being executed`)
+      return
+    }
     scopedLoggers.download.info('Starting download execution for ID:', id, 'URL:', options.url)
     const ytdlp = ytdlpManager.getInstance()
     const settings = settingsManager.getAll()
@@ -1218,6 +1221,7 @@ class DownloadEngine extends EventEmitter {
   }
 
   getActiveDownloads(): DownloadItem[] {
+    this.restoreActiveDownloads()
     const items = new Map<string, DownloadItem>()
     for (const item of this.queue.getActiveItems()) {
       items.set(item.id, item)
@@ -1229,11 +1233,6 @@ class DownloadEngine extends EventEmitter {
   }
 
   restoreActiveDownloads(): void {
-    if (this.sessionRestored) {
-      return
-    }
-    this.sessionRestored = true
-
     const sessionItems = loadDownloadSession()
     if (sessionItems.length === 0) {
       return
@@ -1428,6 +1427,7 @@ class DownloadEngine extends EventEmitter {
     const existing = historyManager.getHistoryById(id)
     const resolvedDownloadPath =
       updates.downloadPath ?? existing?.downloadPath ?? options.customDownloadPath
+    const baseOptions = (existing?.options as DownloadOptions | undefined) ?? options
     const base: DownloadHistoryItem = existing ?? {
       id,
       url: options.url,
@@ -1450,12 +1450,12 @@ class DownloadEngine extends EventEmitter {
       tags: updates.tags ?? options.tags,
       origin: updates.origin ?? options.origin,
       subscriptionId: updates.subscriptionId ?? options.subscriptionId,
-      // Download-specific format info
       selectedFormat: updates.selectedFormat,
       playlistId: updates.playlistId,
       playlistTitle: updates.playlistTitle,
       playlistIndex: updates.playlistIndex,
-      playlistSize: updates.playlistSize
+      playlistSize: updates.playlistSize,
+      options: baseOptions
     }
 
     const merged: DownloadHistoryItem = {
@@ -1470,7 +1470,8 @@ class DownloadEngine extends EventEmitter {
       downloadPath: resolvedDownloadPath ?? base.downloadPath,
       tags: updates.tags ?? base.tags,
       origin: updates.origin ?? base.origin,
-      subscriptionId: updates.subscriptionId ?? base.subscriptionId
+      subscriptionId: updates.subscriptionId ?? base.subscriptionId,
+      options: base.options
     }
 
     historyManager.addHistoryItem(merged)

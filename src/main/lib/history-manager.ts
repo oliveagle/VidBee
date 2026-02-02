@@ -175,7 +175,7 @@ class HistoryManager {
     }
   }
 
-  private getDatabase(): BetterSQLite3Database {
+  getDatabase(): BetterSQLite3Database {
     if (this.db) {
       return this.db
     }
@@ -405,7 +405,8 @@ class HistoryManager {
       playlistId: item.playlistId ?? null,
       playlistTitle: item.playlistTitle ?? null,
       playlistIndex: item.playlistIndex ?? null,
-      playlistSize: item.playlistSize ?? null
+      playlistSize: item.playlistSize ?? null,
+      options: item.options ? JSON.stringify(item.options) : null
     }
   }
 
@@ -421,6 +422,15 @@ class HistoryManager {
         selectedFormat = JSON.parse(row.selectedFormat) as DownloadHistoryItem['selectedFormat']
       } catch (error) {
         logger.warn('history-db failed to parse stored selectedFormat', { id: row.id, error })
+      }
+    }
+
+    let options: DownloadHistoryItem['options']
+    if (row.options) {
+      try {
+        options = JSON.parse(row.options) as DownloadHistoryItem['options']
+      } catch (error) {
+        logger.warn('history-db failed to parse stored options', { id: row.id, error })
       }
     }
 
@@ -452,7 +462,8 @@ class HistoryManager {
       playlistId: row.playlistId ?? undefined,
       playlistTitle: row.playlistTitle ?? undefined,
       playlistIndex: row.playlistIndex ?? undefined,
-      playlistSize: row.playlistSize ?? undefined
+      playlistSize: row.playlistSize ?? undefined,
+      options
     }
   }
 

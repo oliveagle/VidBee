@@ -57,7 +57,7 @@ export const ipcServices = isElectron
         getQueue: async () => apiClient.download.getQueue(),
         getActiveDownloads: async () => {
           const queue = await apiClient.download.getQueue()
-          return queue.active.map((item) => item.id)
+          return queue.active
         }
       },
       history: {

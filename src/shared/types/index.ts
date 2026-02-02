@@ -132,6 +132,7 @@ export interface DownloadHistoryItem {
   playlistTitle?: string
   playlistIndex?: number
   playlistSize?: number
+  options?: DownloadOptions
 }
 
 export interface DownloadOptions {

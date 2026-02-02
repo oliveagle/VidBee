@@ -27,7 +27,8 @@ export const downloadHistoryTable = sqliteTable('download_history', {
   playlistId: text('playlist_id'),
   playlistTitle: text('playlist_title'),
   playlistIndex: integer('playlist_index', { mode: 'number' }),
-  playlistSize: integer('playlist_size', { mode: 'number' })
+  playlistSize: integer('playlist_size', { mode: 'number' }),
+  options: text('options')
 })
 
 export const subscriptionsTable = sqliteTable('subscriptions', {
